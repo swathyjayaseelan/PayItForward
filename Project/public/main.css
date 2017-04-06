@@ -1,0 +1,37 @@
+body{
+  background-color: lightgray;
+}
+.title{
+  background-color: lightblue;
+  margin-top: 0;
+  font-family: 'Dancing Script', cursive, sans-serif;
+}
+.login{
+  width: 350px;
+  height: 500px;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 3px solid white;
+  margin-left: 15px;
+}
+.volunteer{
+  background-image: url("src/img/Volunteering_hands.jpg");
+}
+.org{
+  background-image: url("src/img/organisation.jpg");
+}
+.hospital{
+  background-image: url("src/img/blood.jepg.png");
+}
+.buttonbox{
+  position: absolute;
+  bottom:0;
+  margin-bottom:7px;
+  left: 0;
+  background-color: lightgray;
+  color: black;
+}
+.buttonbox.top{
+  bottom: 53px;
+}
