@@ -1,4 +1,4 @@
-var PayItForward = angular.module('PayItForward', ['ngRoute'])
+var PayItForward = angular.module('PayItForward', ['ngRoute', 'mainController', 'orgController', 'hospitalController'])
 
 .config(['$routeProvider', function($routeProvider){
 
@@ -27,59 +27,12 @@ controller: "MainController"
   templateUrl: 'src/views/organisationlogin.html',
   controller: "MainController"
 })
+.when('/event',{
+  templateUrl: 'src/views/events.html',
+  controller: "OrgController"
+})
 .otherwise({
   redirectTo: '/home',
   controller: "MainController"
 });
-}]);
-
-
-PayItForward.controller('MainController',['$scope','$http', function($scope,$http){
-   console.log("Hello from Main Controller");
-
-$http.get('/userlist').then(successCallback, errorCallback);
-
-  function successCallback(response){
- console.log("I got the data");
- $scope.userlist = response;
-}
-function errorCallback(response){
-  console.log("error");
-}
-$scope.addUser = function(){
-
-  console.log($scope.user);
-  $http.post('/userlist',$scope.user).then(successCallback1,errorCallback1);
-   function successCallback1(response){
-    console.log(response);
-  }
-  function errorCallback1(response){
-    console.log("error");
-  }
-}
-}]);
-
-PayItForward.controller('OrgController',['$scope','$http', function($scope,$http){
-   console.log("Hello from Org Controller");
-
-$http.get('/orglist').then(successCallback2, errorCallback2);
-
-  function successCallback2(response){
- console.log("I got the org data");
- $scope.orglist = response;
-}
-function errorCallback2(response){
-  console.log("error");
-}
-$scope.addOrg = function(){
-console.log("hi");
-  console.log($scope.org);
-  $http.post('/orglist',$scope.org).then(successCallback3,errorCallback3);
-   function successCallback3(response){
-    console.log(response);
-  }
-  function errorCallback3(response){
-    console.log("error");
-  }
-}
 }]);

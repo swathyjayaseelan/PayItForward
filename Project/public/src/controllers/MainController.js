@@ -1,25 +1,25 @@
-var PayItForward = angular.module('PayItForward');
- PayItForward.controller('MainController',['$scope','$http', function($scope,$http){
+angular.module('mainController',[])
+.controller('MainController',['$scope','$http', function($scope,$http){
    console.log("Hello from Main Controller");
 
- person1 = {
- name: "Tim",
- email: "tim@email.com",
- address: "wwwww",
- mobile: "44444444",
- blood: "q",
-  password: "qqqq"
- };
+$http.get('/userlist').then(successCallback, errorCallback);
 
- person2 = {
- name: "Tim1",
- email: "tim@email.com",
- address: "wwwww",
- mobile: "44444444",
- blood: "q",
-  password: "qqqq"
- };
+  function successCallback(response){
+ console.log("I got the data");
+ $scope.userlist = response;
+}
+function errorCallback(response){
+  console.log("error");
+}
+$scope.addUser = function(){
 
- var userlist = [person1, person2];
- $scope.userlist = userlist;
+  console.log($scope.user);
+  $http.post('/userlist',$scope.user).then(successCallback1,errorCallback1);
+   function successCallback1(response){
+    console.log(response);
+  }
+  function errorCallback1(response){
+    console.log("error");
+  }
+}
 }]);
