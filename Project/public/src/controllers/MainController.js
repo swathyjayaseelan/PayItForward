@@ -1,5 +1,5 @@
 angular.module('mainController',[])
-.controller('MainController',['$scope','$http','$location', function($scope,$http,$location){
+.controller('MainController',['$scope','$http','$location','$rootScope', function($scope,$http,$location,$rootScope){
    console.log("Hello from Main Controller");
 
 $http.get('/userlist').then(successCallback, errorCallback);
@@ -11,13 +11,12 @@ $http.get('/userlist').then(successCallback, errorCallback);
 function errorCallback(response){
   console.log("error");
 }
-$scope.addUser = function(){
+$scope.addUser = function(volunteer){
 
   //console.log($scope.user);
-  $http.post('/userlist',$scope.user).then(successCallback1,errorCallback1);
+  $http.post('/userlist',volunteer).then(successCallback1,errorCallback1);
    function successCallback1(response){
-     console.log("sent successfully");
-console.log(response);
+     $rootScope.currentVolunteer = volunteer;
   }
   function errorCallback1(response){
     console.log("error");
@@ -29,8 +28,9 @@ $scope.login = function(volunteer){
   function successCallback2(response)
   {
     //$location.path("/");
-    console.log("sent successfully");
-    console.log(response);
+    //console.log("sent successfully");
+    //console.log(response);
+    $rootScope.currentVolunteer = volunteer;
   }
   function errorCallback2(response){
     console.log("error");

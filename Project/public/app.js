@@ -23,6 +23,13 @@ controller: "MainController"
   templateUrl: 'src/views/volunteerlogin.html',
   controller: "MainController"
 })
+.when('/profile', {
+  templateUrl: 'src/views/profile.html',
+  resolve: {
+    logincheck: checkLoggedin
+  },
+  controller: "MainController"
+})
 .when('/organisationlogin',{
   templateUrl: 'src/views/organisationlogin.html',
   controller: "MainController"
@@ -36,3 +43,37 @@ controller: "MainController"
   controller: "MainController"
 });
 }]);
+
+var checkLoggedin = function($q, $timeout, $http, $location, $rootScope)
+{
+  console.log("checking");
+    //var deferred = $q.defer();
+
+    $http.get('/loggedin').then(successCallback, errorCallback);
+
+    function successCallback(response)
+    {
+      console.log(response);
+        $rootScope.errorMessage = null;
+        // User is Authenticated
+        if (volunteer !== '0'){
+
+            //deferred.resolve(volunteer);
+        // User is Not Authenticated
+        console.log("here");
+      }
+        else
+        {
+            $rootScope.errorMessage = 'You need to log in.';
+            //deferred.reject();
+            $location.url('/volunteerlogin');
+        }
+    }
+
+    function errorCallback(response){
+
+      console.log("error");
+    }
+
+    //return deferred.promise;
+};

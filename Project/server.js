@@ -9,11 +9,15 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 //var session = require('express-session');
+var cookieParser = require('cookie-parser');
+var session      = require('express-session');
+
 
 app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/public'));
 app.use(flash());
+app.use(cookieParser());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -28,11 +32,29 @@ app.get('/userlist',function(req,res){
   });
 });
 app.post('/userlist',function(req, res, next){
-console.log(req.body);
+//console.log(req.body);
 //console.log("Empty object");
-db.user.insert(req.body, function(err,doc){
-  res.json(doc);
+db.user.findOne({email: {$eq:req.body.email}}, function(err, user){
+  //console.log(req.body.email);
+
+  if(user){
+    res.json(null);
+    console.log("user exists");
+    return;
+  }
+
+  else{
+    console.log("insert");
+    db.user.insert(req.body, function(err,doc){
+        res.json(doc);
+      });
+  }
+
 });
+});
+
+app.get('/loggedin', function(req, res){
+ res.send(req.isAuthenticated() ? req.volunteer : '0');
 });
 
 app.get('/orglist',function(req, res){
@@ -67,11 +89,9 @@ passport.use(new LocalStrategy(
 db.user.findOne({$and : [{email: { $eq: username}}, {password: {$eq: password}}]}, function(err, user){
   if(user){
     console.log(user);
+    return done(null, user);
   }
-  else{
-    console.log("not der");
-  }
-
+    return done(null, false, {message: 'Unabke to login'} );
 });
 }
   /*
