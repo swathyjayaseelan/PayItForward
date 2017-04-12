@@ -11,29 +11,37 @@ $http.get('/userlist').then(successCallback, errorCallback);
 function errorCallback(response){
   console.log("error");
 }
-$scope.addUser = function(volunteer){
+$scope.addUser = function(user){
 
   //console.log($scope.user);
-  $http.post('/userlist',volunteer).then(successCallback1,errorCallback1);
-   function successCallback1(response){
-     $rootScope.currentVolunteer = volunteer;
+  $http.post('/userlist',user).then(successCallback1,errorCallback1);
+   function successCallback1(user){
+     $rootScope.currentUser = user;
   }
   function errorCallback1(response){
     console.log("error");
   }
 }
 
-$scope.login = function(volunteer){
-  $http.post('/loginVolunteer', volunteer).then(successCallback2,errorCallback2);
+$scope.login = function(user){
+  $http.post('/loginVolunteer', user).then(successCallback2,errorCallback2);
   function successCallback2(response)
   {
-    //$location.path("/");
-    //console.log("sent successfully");
-    //console.log(response);
-    $rootScope.currentVolunteer = volunteer;
+    $rootScope.currentUser = response;
+    console.log($rootScope.currentUser);
+    $location.url("/profile");
   }
   function errorCallback2(response){
     console.log("error");
   }
+}
+
+$scope.logout = function(){
+  console.log("logout");
+  $http.post('/logoutVolunteer')
+  .success(function(){
+    $location.url('/home');
+
+  });
 }
 }]);

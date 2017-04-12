@@ -1,14 +1,17 @@
 var express = require('express');
 var app = express();
+
 var mongojs = require('mongojs');
 var db = mongojs('user', ['user']);
+
 var bodyParser = require('body-parser');
 var multer = require ('multer');
+
 var crypto = require('crypto');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
-//var session = require('express-session');
+
 var cookieParser = require('cookie-parser');
 var session      = require('express-session');
 
@@ -18,7 +21,14 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 app.use(flash());
 app.use(cookieParser());
-
+app.use(session({
+  secret: 'my secret',
+  saveUninitialized: true,
+  resave: true
+            }));
+//app.use(multer());
+//app.use(multer({ dest: './uploads/'}))
+app.use(multer({dest:__dirname+'public/file/uploads/'}).any());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -53,8 +63,9 @@ db.user.findOne({email: {$eq:req.body.email}}, function(err, user){
 });
 });
 
-app.get('/loggedin', function(req, res){
- res.send(req.isAuthenticated() ? req.volunteer : '0');
+app.get('/loggedin', function(req, res, next){
+  //console.log(req);
+ res.send(req.isAuthenticated() ? req.user : '0');
 });
 
 app.get('/orglist',function(req, res){
@@ -76,6 +87,10 @@ app.post('/loginVolunteer',passport.authenticate('local'), function(req, res){
   res.json(req.user);
 });
 
+app.post('/logoutVolunteer', function(req, res){
+  req.logOut();
+  res.send(200);
+});
 //User authentication
 
 passport.use(new LocalStrategy(
@@ -103,12 +118,12 @@ db.user.findOne({$and : [{email: { $eq: username}}, {password: {$eq: password}}]
 */
 ));
 
-passport.serializeUser(function(volunteer, done){
-  done(null, volunteer);
+passport.serializeUser(function(user, done){
+  done(null, user);
 });
 
-passport.deserializeUser(function(volunteer, done){
-  done(null, volunteer);
+passport.deserializeUser(function(user, done){
+  done(null, user);
 });
 
 

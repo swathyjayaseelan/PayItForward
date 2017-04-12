@@ -46,34 +46,36 @@ controller: "MainController"
 
 var checkLoggedin = function($q, $timeout, $http, $location, $rootScope)
 {
-  console.log("checking");
-    //var deferred = $q.defer();
+    var deferred = $q.defer();
+console.log("checking");
+//console.log(user);
+   $http.get('/loggedin').then(successCallback, errorCallback);
 
-    $http.get('/loggedin').then(successCallback, errorCallback);
-
-    function successCallback(response)
+    function successCallback(user)
     {
-      console.log(response);
+      console.log("inside http");
+      console.log(user);
+      $rootScope.currentUser = user;
         $rootScope.errorMessage = null;
         // User is Authenticated
-        if (volunteer !== '0'){
-
-            //deferred.resolve(volunteer);
+        if (user.data !== '0'){
+          console.log("success");
+            deferred.resolve();
+          }
         // User is Not Authenticated
-        console.log("here");
-      }
         else
         {
+          console.log("failure");
             $rootScope.errorMessage = 'You need to log in.';
-            //deferred.reject();
+            deferred.reject();
             $location.url('/volunteerlogin');
         }
     }
-
     function errorCallback(response){
-
       console.log("error");
     }
 
-    //return deferred.promise;
+//http.get('/loggedin').success(function(user))
+
+    return deferred.promise;
 };
