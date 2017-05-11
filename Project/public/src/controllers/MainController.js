@@ -28,14 +28,12 @@ $scope.login = function(user){
   function successCallback2(response)
   {
     $rootScope.currentUser = response;
-    console.log($rootScope.currentUser);
-    $location.url("/profile");
+      $location.url("/userprofile");
   }
   function errorCallback2(response){
-    console.log("error");
+    alert("Invalid credentials");
   }
 }
-
 $scope.logout = function(){
   console.log("logout");
   $http.post('/logoutVolunteer')
@@ -44,4 +42,16 @@ $scope.logout = function(){
 
   });
 }
+
+$scope.postEvent = function(event){
+  console.log(event);
+  $http.post('/postEvents',event).then(successCallback,errorCallback);
+  function successCallback(response){
+    $rootScope.currentEvent = event;
+  }
+  function errorCallback(response){
+    console.log("error");
+  }
+}
+
 }]);

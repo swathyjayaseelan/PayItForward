@@ -1,4 +1,4 @@
-var PayItForward = angular.module('PayItForward', ['ngRoute', 'mainController', 'orgController', 'hospitalController'])
+var PayItForward = angular.module('PayItForward', ['ngRoute', 'mainController','OrgController', 'hospitalController'])
 
 .config(['$routeProvider', function($routeProvider){
 
@@ -15,6 +15,15 @@ controller: "MainController"
   templateUrl: 'src/views/organisation.html',
   controller: "OrgController"
 })
+.when('/editorgprofile',{
+  templateUrl: 'src/views/editorgProfile.html'
+})
+.when('/addvolreview', {
+  templateUrl: 'src/views/addvolreview.html'
+})
+.when('/postevents',{
+  templateUrl: 'src/views/postevents.html'
+})
 .when('/newvolunteer',{
   templateUrl: 'src/views/newvolunteer.html',
   controller: "MainController"
@@ -23,12 +32,19 @@ controller: "MainController"
   templateUrl: 'src/views/volunteerlogin.html',
   controller: "MainController"
 })
-.when('/profile', {
-  templateUrl: 'src/views/profile.html',
+.when('/userprofile', {
+  templateUrl: 'src/views/userprofile.html',
   resolve: {
     logincheck: checkLoggedin
   },
   controller: "MainController"
+})
+.when('/orgprofile', {
+  templateUrl: 'src/views/orgprofile.html',
+  resolve: {
+    logincheck: checkLoggedinOrg
+  },
+  controller: "OrgController"
 })
 .when('/organisationlogin',{
   templateUrl: 'src/views/organisationlogin.html',
@@ -36,7 +52,7 @@ controller: "MainController"
 })
 .when('/event',{
   templateUrl: 'src/views/events.html',
-  controller: "OrgController"
+  controller: "MainController"
 })
 .otherwise({
   redirectTo: '/home',
@@ -47,13 +63,13 @@ controller: "MainController"
 var checkLoggedin = function($q, $timeout, $http, $location, $rootScope)
 {
     var deferred = $q.defer();
-console.log("checking");
+//console.log("checking");
 //console.log(user);
    $http.get('/loggedin').then(successCallback, errorCallback);
 
     function successCallback(user)
     {
-      console.log("inside http");
+      //console.log("inside http");
       console.log(user);
       $rootScope.currentUser = user;
         $rootScope.errorMessage = null;
@@ -65,10 +81,11 @@ console.log("checking");
         // User is Not Authenticated
         else
         {
-          console.log("failure");
+          //console.log("failure");
             $rootScope.errorMessage = 'You need to log in.';
             deferred.reject();
-            $location.url('/volunteerlogin');
+            //console.log(user);
+            $location.url('/home');
         }
     }
     function errorCallback(response){
@@ -76,6 +93,38 @@ console.log("checking");
     }
 
 //http.get('/loggedin').success(function(user))
+    return deferred.promise;
+};
 
+var checkLoggedinOrg = function($q, $timeout, $http, $location, $rootScope)
+{
+    var deferred = $q.defer();
+   $http.get('/loggedinorg').then(successCallback, errorCallback);
+
+    function successCallback(user)
+    {
+      console.log(user);
+      $rootScope.currentUser = user;
+        $rootScope.errorMessage = null;
+        // User is Authenticated
+        if (user.data !== '0'){
+          console.log("success");
+            deferred.resolve();
+          }
+        // User is Not Authenticated
+        else
+        {
+          //console.log("failure");
+            $rootScope.errorMessage = 'You need to log in.';
+            deferred.reject();
+            //console.log(user);
+            $location.url('/home');
+        }
+    }
+    function errorCallback(response){
+      console.log("error");
+    }
+
+//http.get('/loggedin').success(function(user))
     return deferred.promise;
 };

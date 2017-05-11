@@ -10,7 +10,7 @@
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Website Address</label>
         <div class="col-sm-4">
-          <input type="email" class="form-control" placeholder="www.xxx.com" ng-required="true" ng-model="org.website">
+          <input type="text" class="form-control" placeholder="www.xxx.com" ng-required="true" ng-model="org.website">
         </div>
       </div>
       <div class="form-group">
@@ -37,9 +37,10 @@
           <input class="form-control" placeholder="Password" ng-required="true" ng-model="org.password">
         </div>
       </div>
+
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-success" ng-click="addOrg()">Sign up</button>
+          <button type="submit" class="btn btn-success" ng-click="addOrg(org)">Sign up</button>
         </div>
       </div>
 

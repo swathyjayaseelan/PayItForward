@@ -1,0 +1,94 @@
+<h1>Post events here</h1>
+<form class="form-horizontal" ng-controller="MainController">
+  {{currentUser.data.name}}
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Name of Event</label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" placeholder="Name" ng-required="true" ng-model="event.name">
+        </div>
+      </div>
+<!--
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Date</label>
+        <div class="col-sm-4">
+          <input type="date" class="form-control" ng-required="true" ng-model="event.date">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Time</label>
+        <div class="col-sm-4">
+          <input type="time" class="form-control" ng-required="true" ng-model="event.time">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Estimated time commitment</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" placeholder="Hours" ng-required="true" ng-model="event.estimate">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Location</label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" placeholder="Address" ng-required="true" ng-model="event.location">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Sponsoring Organization/Person</label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" placeholder="Sponsor" ng-required="true" ng-model="event.sponsor">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Description</label>
+        <div class="col-sm-4">
+          <textarea type="text" class="form-control" placeholder="Short Description" ng-required="true" ng-model="event.description"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Contact email</label>
+        <div class="col-sm-4">
+          <input type="email" class="form-control" placeholder="xxx@email.com" ng-required="true" ng-model="event.email">
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Skills needed</label>
+        <div class="col-sm-4">
+        <label class="checkbox-inline">
+        <input type="checkbox" value="">Verbal/Written Communication
+      </label>
+        <label class="checkbox-inline">
+        <input type="checkbox" value="">Basic Computer Skills/Administrative Support
+      </label>
+      <label class="checkbox-inline">
+      <input type="checkbox" value="" disabled>Food Delivery/Distribution
+    </label>
+  <label class="checkbox-inline">
+  <input type="checkbox" value="">Elder Care
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" value="">Landscaping/gardening
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" value="" disabled>Fitness Instruction
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" value="">Tutoring
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" value="" disabled>Animal care
+</label>
+<label class="checkbox-inline">
+<input type="checkbox" value="">Book keeping
+</label>
+        </div>
+      </div>
+-->
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-success" ng-click="postEvent(event)">Submit</button>
+        </div>
+      </div>
+
+    </form>
