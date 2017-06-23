@@ -1,4 +1,4 @@
-var PayItForward = angular.module('PayItForward', ['ngRoute', 'mainController','OrgController', 'hospitalController'])
+var PayItForward = angular.module('PayItForward', ['ngRoute','checklist-model','ngMap'])
 
 .config(['$routeProvider', function($routeProvider){
 
@@ -13,7 +13,7 @@ controller: "MainController"
 })
 .when('/organisation',{
   templateUrl: 'src/views/organisation.html',
-  controller: "OrgController"
+  controller: "MainController"
 })
 .when('/editorgprofile',{
   templateUrl: 'src/views/editorgProfile.html'
@@ -22,7 +22,8 @@ controller: "MainController"
   templateUrl: 'src/views/addvolreview.html'
 })
 .when('/postevents',{
-  templateUrl: 'src/views/postevents.html'
+  templateUrl: 'src/views/postevents.html',
+  controller: "OrgController"
 })
 .when('/newvolunteer',{
   templateUrl: 'src/views/newvolunteer.html',
@@ -42,9 +43,9 @@ controller: "MainController"
 .when('/orgprofile', {
   templateUrl: 'src/views/orgprofile.html',
   resolve: {
-    logincheck: checkLoggedinOrg
+    logincheck: checkLoggedin
   },
-  controller: "OrgController"
+  controller: "MainController"
 })
 .when('/organisationlogin',{
   templateUrl: 'src/views/organisationlogin.html',
@@ -70,39 +71,6 @@ var checkLoggedin = function($q, $timeout, $http, $location, $rootScope)
     function successCallback(user)
     {
       //console.log("inside http");
-      console.log(user);
-      $rootScope.currentUser = user;
-        $rootScope.errorMessage = null;
-        // User is Authenticated
-        if (user.data !== '0'){
-          console.log("success");
-            deferred.resolve();
-          }
-        // User is Not Authenticated
-        else
-        {
-          //console.log("failure");
-            $rootScope.errorMessage = 'You need to log in.';
-            deferred.reject();
-            //console.log(user);
-            $location.url('/home');
-        }
-    }
-    function errorCallback(response){
-      console.log("error");
-    }
-
-//http.get('/loggedin').success(function(user))
-    return deferred.promise;
-};
-
-var checkLoggedinOrg = function($q, $timeout, $http, $location, $rootScope)
-{
-    var deferred = $q.defer();
-   $http.get('/loggedinorg').then(successCallback, errorCallback);
-
-    function successCallback(user)
-    {
       console.log(user);
       $rootScope.currentUser = user;
         $rootScope.errorMessage = null;

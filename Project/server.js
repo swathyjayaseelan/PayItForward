@@ -9,7 +9,7 @@ var multer = require ('multer');
 
 var crypto = require('crypto');
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+var LocalStrategy = require('passport-local');
 var flash = require('connect-flash');
 
 var cookieParser = require('cookie-parser');
@@ -20,24 +20,21 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/public'));
 app.use(flash());
-app.use(cookieParser());
+
 app.use(session({
-  secret: 'my secret',
+  secret: 'this is the secret',
   saveUninitialized: true,
   resave: true
             }));
+app.use(cookieParser());
 //app.use(multer());
 //app.use(multer({ dest: './uploads/'}))
 app.use(multer({dest:__dirname+'public/file/uploads/'}).any());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.post('/postEvents',function(req,res){
- console.log(req.body);
 
-});
-
-//Volunteer
+//User registration
 app.get('/userlist',function(req,res,next){
   db.user.find(function(err,docs){
     res.json(docs);
@@ -58,18 +55,13 @@ db.user.findOne({email: {$eq:req.body.email}}, function(err, user){
   }
 });
 });
-app.get('/loggedin', function(req, res, next){
- res.send(req.isAuthenticated() ? req.user : '0');
-});
 
-app.post('/logoutVolunteer', function(req, res){
-  req.logOut();
-  res.send(200);
-});
+
 
 //User authentication
-app.post('/loginVolunteer',passport.authenticate('user'), function(req, res){
+app.post('/login',passport.authenticate('user'), function(req, res){
   res.json(req.user);
+  currentUser = req.user;
 });
 passport.use('user', new LocalStrategy(
   {
@@ -94,57 +86,50 @@ passport.serializeUser(function(user, done){
 passport.deserializeUser(function(user, done){
   done(null, user);
 });
-
-
-//organisation
-
-app.get('/orglist',function(req,res,next){
-  db.org.find(function(err,docs){
-    res.json(docs);
-  });
+app.get('/loggedin', function(req, res, next){
+ res.send(req.isAuthenticated() ? req.user : '0');
 });
-app.post('/orglist',function(req, res, next){
-db.org.findOne({email: {$eq:req.body.email}}, function(err, user){
-  if(user){
-    res.json(null);
-    console.log("user exists");
-    return;
-  }
-  else{
-    console.log("insert");
-    db.org.insert(req.body, function(err,doc){
-        res.json(doc);
-      });
-  }
-});
-});
-
-app.post('/loginOrg',passport.authenticate('org'), function(req, res){
-  res.json(req.user);
-});
-passport.use('org', new LocalStrategy(
-  {
-    usernameField: 'email',
-    passwordField: 'password'
-  },
-  function(username, password, done)
-{
-db.org.findOne({$and : [{email: { $eq: username}}, {password: {$eq: password}}]}, function(err, org){
-  if(org){
-    console.log(org);
-    return done(null, org);
-  }
-    return done(null, false, {message: 'Unable to login'} );
-});
-}
-));
-app.post('/logoutOrg', function(req, res){
+app.post('/logout', function(req, res){
   req.logOut();
   res.send(200);
 });
 
-app.get('/loggedinorg', function(req, res, next){
- res.send(req.isAuthenticated() ? req.org : '0');
+//Post events
+app.post('/postEvents',function(req,res){
+ console.log(req.body);
+ //console.log(currentUser);
+ db.user.update(
+   {_id: currentUser._id },
+   {
+     $addToSet: {events: req.body }
+   }
+ );
+ //console.log("I reached");
+ //console.log(req.body.expskills);
+ var check = req.body.expskills;
+db.user.find({$and: [{role: "volunteer"},{ skills: {$in: check}}]}, function(err,docs){
+  console.log(docs);
+  for (var key in docs) {
+   if (docs.hasOwnProperty(key)) {
+      var obj = docs[key];
+      for (var prop in obj) {
+         if (obj.hasOwnProperty(prop)) {
+            //alert(prop + " = " + obj[prop]);
+            console.log(obj[prop]);
+         }
+      }
+   }
+}
+});
+
+});
+app.post('/updateUser',function(req, res, next){
+  //console.log(req.body.data._id);
+  db.user.update(
+    { name: req.body.data.name},
+    {$unset: {currentlocation: 0 }}
+  );
+
 });
 
 app.get('/hospitallist',function(req, res){

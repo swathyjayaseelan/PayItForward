@@ -13,7 +13,8 @@
           <input type="email" class="form-control" placeholder="Email" ng-required="true" ng-model="user.email">
         </div>
       </div>
-      <div class="form-group">
+      <!--
+      <<div class="form-group">
         <label class="col-sm-2 control-label">Address</label>
         <div class="col-sm-4">
           <input class="form-control" placeholder="Address" ng-required="true" ng-model="user.address">
@@ -30,6 +31,16 @@
         <div class="col-sm-4">
           <input type="tel" class="form-control" placeholder="A+, B+, O+, B- etc" ng-required="true" ng-model="user.blood">
         </div>
+      </div>
+    -->
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Skills</label>
+        <div class="col-sm-8">
+        <div ng-repeat="skill in allskills">
+        <input type="checkbox" checklist-model="storeskills"  checklist-value="skill">{{skill}}<br>{{storeskills}}
+
+      </div>
+    </div>
       </div>
 
       <div class="form-group">
