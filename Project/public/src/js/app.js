@@ -1,6 +1,6 @@
-var PayItForward = angular.module('PayItForward', ['ngRoute','checklist-model','ngMap'])
+var PayItForward = angular.module('PayItForward', ['ngRoute','checklist-model','ngMap','720kb.socialshare'])
 
-.config(['$routeProvider', function($routeProvider){
+.config(['$routeProvider','$locationProvider', function($routeProvider,$locationProvider){
 
 $routeProvider
 .when('/home',{
@@ -53,6 +53,10 @@ controller: "MainController"
 })
 .when('/event',{
   templateUrl: 'src/views/events.html',
+  controller: "MainController"
+})
+.when('/viewevent',{
+  templateUrl: 'src/views/viewevent.html',
   controller: "MainController"
 })
 .otherwise({

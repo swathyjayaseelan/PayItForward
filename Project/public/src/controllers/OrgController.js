@@ -29,7 +29,7 @@ $scope.coordinates = {};
 //Function to post event
    $scope.postEvent = function(event){
    $scope.event.expskills = $scope.skills;
-   console.log($scope.coordinates);
+   console.log($rootScope.currentUser);
    $scope.event.loc = $scope.coordinates;
    console.log($scope.event.loc);
      $http.post('/postEvents',event).then(successCallback,errorCallback);

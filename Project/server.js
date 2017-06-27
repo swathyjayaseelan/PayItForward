@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 
 var mongojs = require('mongojs');
+var ObjectId = require("mongojs").ObjectId;
 var db = mongojs('user', ['user']);
 
 var bodyParser = require('body-parser');
@@ -14,7 +15,8 @@ var flash = require('connect-flash');
 
 var cookieParser = require('cookie-parser');
 var session      = require('express-session');
-
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
 
 app.use(bodyParser.json());
 
@@ -72,7 +74,7 @@ passport.use('user', new LocalStrategy(
 {
 db.user.findOne({$and : [{email: { $eq: username}}, {password: {$eq: password}}]}, function(err, user){
   if(user){
-    console.log(user);
+    //console.log(user);
     return done(null, user);
   }
     return done(null, false, {message: 'Unable to login'} );
@@ -97,25 +99,30 @@ app.post('/logout', function(req, res){
 //Post events
 app.post('/postEvents',function(req,res){
  console.log(req.body);
- //console.log(currentUser);
- db.user.update(
+ console.log(currentUser);
+/* db.user.update(
    {_id: currentUser._id },
    {
      $addToSet: {events: req.body }
    }
- );
+ );*/
+req.body.orgid = currentUser._id;
+db.events.insert(req.body, function(err,doc){
+  res.json(doc);
+});
+
  //console.log("I reached");
  //console.log(req.body.expskills);
  var check = req.body.expskills;
 db.user.find({$and: [{role: "volunteer"},{ skills: {$in: check}}]}, function(err,docs){
-  console.log(docs);
+  //console.log(docs);
   for (var key in docs) {
    if (docs.hasOwnProperty(key)) {
       var obj = docs[key];
       for (var prop in obj) {
          if (obj.hasOwnProperty(prop)) {
             //alert(prop + " = " + obj[prop]);
-            console.log(obj[prop]);
+            //console.log(obj[prop]);
          }
       }
    }
@@ -131,6 +138,81 @@ app.post('/updateUser',function(req, res, next){
   );
 
 });
+
+//matching events with volunteers
+app.post('/matchEvents',function(req,res,next){
+  //console.log(req.body);
+  db.runCommand( { geoNear: "events", near: req.body, spherical: true, distanceMultiplier: 6371,  includeLocs: true , distanceField:"dist.calculated"}, function(err,docs){
+
+    res.json(docs.results);
+  });
+});
+
+//Nodemailer to send email to volunteer organiser
+
+app.post('/postEmail',function(req,res,next){
+  //console.log("reched here");
+  console.log(req.body);
+  var mailOpts, smtpTrans;
+  //Setup Nodemailer transport, I chose gmail. Create an application-specific password to avoid problems.
+
+  /*smtpTrans = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    xoauth2: xoauth2.createXOAuth2Generator({
+    user: 'swathyjayaseelan@gmail.com',
+    pass: 'payitforward'
+  }
+)
+});
+*/
+var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    //secure: true, // secure:true for port 465, secure:false for port 587
+    auth: {
+        user: 'swathyjayaseelan@gmail.com',
+        pass: 'Jayaseelan3773'
+    }
+});
+
+  //Mail options
+  mailOpts = {
+      from: 'swathyjayaseelan@gmail.com',
+      to: 'reeves.skr@gmail.com',
+      subject: 'New volunteer request for event: '+req.body.data.eventname,
+      text: 'A new volunteer has requested for the below events',
+      html: '<b>Event name: </b>'+req.body.data.eventname+'<br>'+'<b>Event location: </b>'+req.body.data.eventloc+'br>'+'<b>Volunteer name: </b>'+req.body.data.name+ '<br>'+'<b>Contact Email: </b>'+req.body.data.email+'<br>'+ '<b>Skills: </b>'+req.body.data.skills
+  };
+  transporter.sendMail(mailOpts, function (error, response) {
+      //Email not sent
+      if (error) {
+        console.log(error);
+      }
+
+      //Yay!! Email sent
+      else {
+        console.log("success");
+      }
+  });
+
+
+});
+
+//adding volunteer to the requested event
+app.post('/addreqVol',function(req,res,next){
+  console.log(req.body);
+  voldetails = {};
+  voldetails.name = req.body.data.name;
+  voldetails.email = req.body.data.email;
+  voldetails.skills = req.body.data.skills;
+  //console.log(req.body.data.eventid);
+  console.log(voldetails);
+  db.events.update(
+    {_id: ObjectId(req.body.data.eventid)},
+    {$addToSet:{reqvollist: voldetails}}
+  );
+});
+
 
 app.get('/hospitallist',function(req, res){
   db.hospital.find(function(err,docs){

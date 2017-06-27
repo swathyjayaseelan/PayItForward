@@ -1,3 +1,6 @@
+<head>
+   <meta property="og:title" content="Event"/>
+</head>
 <body>
 <div ng-controller="MainController as vm" id="wrapper" data-spy="scroll" data-target="#spy" class="">
    <!-- Sidebar -->
@@ -32,32 +35,46 @@
        </nav>
    </div>
 
-
-           <div class="row">
-
-               <div class="jumbotron text-center col-md-8">
+<!--Main content-->
+<div class="container">
+    <div class="row">
+               <div class="jumbotron text-center col-md-7 ">
                     <h1 class="">Hello {{currentUser.data.name}}!</h>
                </div>
-               <div style="background-color:lightblue;" class="col-md-4">
-                 <h1>Events nearby</h1>
-               </div>
-            </div>
-            <div class="row">
-              <p><button ng-click="gotoCurrentLocation()">I feel like helping someone nearby. Search for locations near me</button></p>
 
-               <div class=" col-md-8">
+               <div  class="col-md-5">
+                 <div style="background-color:lightblue;">
+                 <h1>Events nearby</h1></div>
+
+                     <div ng-repeat="x in eventdata">
+                     <p><strong>Distance:</strong> {{x.dis}}</p>
+
+                     <p><strong>Event name:</strong> {{x.obj.name}}</p>
+                     <p><strong>Expected Skills:</strong>
+                       <ul ng-repeat="y in x.obj.expskills">
+                         <li>{{y}}</li>
+                       </ul>
+                     </p>
+                     <p><strong>Location: </strong>{{x.obj.location}}</p>
+                     <button class="btn btn-primary" ng-click="viewEvent(x)">Learn more and request!</button>
+                     <br>
+                     <hr>
+                   </div>
+               </div>
+             </div>
+
+
+
+
+               <div class=" col-md-7">
              <ng-map id="map" center='current-position'
     geo-fallback-center="[40.74, -74.18]"
-    geo-callback="vm.callbackFunc('you')"
-    >
+    geo-callback="vm.callbackFunc('you')">
     <marker animation="DROP" position="current-location">
-
     </marker>
     </ng-map>
-               </div>
-           </div>
-           <script>
-           console.log("hello");
-           </script>
+             </div>
+      </div>
 
+</div>
 </body>
