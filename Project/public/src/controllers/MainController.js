@@ -4,6 +4,22 @@ PayItForward.controller('MainController',['$scope','$http','$location','$rootSco
 //To get the current location of user
   var vm = this;
   $scope.eventdata = [];
+
+  vm.types = "['establishment']";
+$scope.addresscoord = {};
+
+  vm.placeChanged = function() {
+    vm.place = this.getPlace();
+    //console.log(vm.place.geometry.location.lat.a);
+    //console.log(vm.place.geometry.location.toJSON());
+    var old = vm.place.geometry.location.toJSON();
+    newo = {
+      lng: old.lng,
+      lat: old.lat
+    };
+    $scope.addresscoord = newo;
+   //console.log($scope.coordinates);
+  }
       //vm.message = 'You can not hide. :)';
       NgMap.getMap("map").then(function(map) {
         vm.map = map;
@@ -51,7 +67,8 @@ $scope.addUser = function(user){
   //console.log($scope.storeskills);
   $scope.user.skills = $scope.storeskills;
   $scope.user.location = "";
-  //console.log($scope.user);
+  $scope.user.addresscoordinates = $scope.addresscoord;
+  console.log($scope.user);
   if($scope.user.website === undefined){
     $scope.user.role = "volunteer";
   }

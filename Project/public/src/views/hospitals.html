@@ -1,7 +1,7 @@
 <br><br>
 <h3 class="text-center">Please fill the below details</h3>
 <br>
-<form class="form-horizontal" ng-controller="HospitalController">
+<form class="form-horizontal" ng-controller="HospitalController as vm">
       <div class="form-group">
 
         <label class="col-sm-2 control-label">Hospital Name</label>
@@ -14,7 +14,7 @@
 
         <div class="col-sm-4">
           <input class="form-control" places-auto-complete size="59"
-            ng-model="hsopital.location"
+            ng-model="hospital.location"
             component-restrictions="{country:'us'}"
             types="{{types}}"
             on-place-changed="vm.placeChanged()" /> <br/>
@@ -35,7 +35,7 @@
       </div>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-success" ng-click="addHospital()">Submit</button>
+          <button type="submit" class="btn btn-success" ng-click="addHospital(hospital)">Submit</button>
         </div>
       </div>
 

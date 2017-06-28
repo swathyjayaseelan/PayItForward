@@ -9,7 +9,7 @@ controller: "MainController"
 })
 .when('/hospitals',{
   templateUrl: 'src/views/hospitals.html',
-  controller: "MainController"
+  controller: "HospitalController"
 })
 .when('/organisation',{
   templateUrl: 'src/views/organisation.html',

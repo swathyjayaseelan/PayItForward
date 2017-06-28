@@ -142,7 +142,7 @@ app.post('/updateUser',function(req, res, next){
 //matching events with volunteers
 app.post('/matchEvents',function(req,res,next){
   //console.log(req.body);
-  db.runCommand( { geoNear: "events", near: req.body, spherical: true, distanceMultiplier: 6371,  includeLocs: true , distanceField:"dist.calculated"}, function(err,docs){
+  db.runCommand( { geoNear: "events", near: req.body, spherical: true, distanceMultiplier: 3963.2,  includeLocs: true , distanceField:"dist.calculated"}, function(err,docs){
     docs.resultsnew = [];
     var count = 0;
   //  console.log(docs.results);
@@ -263,16 +263,93 @@ app.post('/addaccvol',function(req,res,next){
     {$addToSet:{acceptedvollist: req.body}}
   );
 });
-app.get('/hospitallist',function(req, res){
-  db.hospital.find(function(err,docs){
-    res.json(docs);
-  });
-});
+
 app.post('/hospitallist',function(req, res, next){
+  console.log(req.body);
+  var search = [];
+  search.push(req.body.locationcoord.lng);
+  search.push(req.body.locationcoord.lat);
+  console.log(search);
 db.hospital.insert(req.body, function(err,doc){
-  res.json(doc);
+  db.runCommand( { geoNear: "user", near: search, spherical: true, distanceMultiplier: 3963.2, maxDistance: (10/3963.2), includeLocs: true , distanceField:"distance", query: {blood: req.body.blood}}, function(err,docs){
+  //console.log(docs.results);
+var mailOpts, smtpTrans;
+var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    //secure: true, // secure:true for port 465, secure:false for port 587
+    auth: {
+        user: 'swathyjayaseelan@gmail.com',
+        pass: 'Jayaseelan3773'
+    }
 });
+
+  for(var donor in docs.results){
+    console.log(docs.results[donor]);
+    mailOpts = {
+        from: 'swathyjayaseelan@gmail.com',
+        to: docs.results[donor].obj.email,
+        subject: 'Blood needed urgently!!',
+        text: 'A new volunteer has requested for the below events',
+        html: '<b>Hospital name: </b>'+req.body.name+'<br>'+'<b> Location: </b>'+req.body.location+'<br>'+'<b>Contact number: </b>'+req.body.number+ '<br>'+'<b>Distance from home: </b>'+docs.results[donor].dis+'miles'+'<br>'
+    };
+    transporter.sendMail(mailOpts, function (error, response) {
+        //Email not sent
+        if (error) {
+          console.log(error);
+        }
+
+        //Yay!! Email sent
+        else {
+          console.log("success");
+        }
+    });
+
+
+  }
+
+
 });
+res.json(doc);
+});
+
+  /*var mailOpts, smtpTrans;
+  //Setup Nodemailer transport, I chose gmail. Create an application-specific password to avoid problems.
+
+
+var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    //secure: true, // secure:true for port 465, secure:false for port 587
+    auth: {
+        user: 'swathyjayaseelan@gmail.com',
+        pass: 'Jayaseelan3773'
+    }
+});
+
+  //Mail options
+  mailOpts = {
+      from: 'swathyjayaseelan@gmail.com',
+      to: 'swathyjayaseelan@gmail.com',
+      subject: 'Blood needed urgently!!',
+      text: 'A new volunteer has requested for the below events',
+      html: '<b>Hospital name: </b>'+req.body.name+'<br>'+'<b> Location: </b>'+req.body.location+'br>'+'<b>Contact number: </b>'+req.body.number+ '<br>'+'<b>Distance from home: </b>'+req.body.data.email+'<br>'
+  };
+  transporter.sendMail(mailOpts, function (error, response) {
+      //Email not sent
+      if (error) {
+        console.log(error);
+      }
+
+      //Yay!! Email sent
+      else {
+        console.log("success");
+      }
+  });
+
+
+*/
+});
+
+
 
 app.listen(3000);
 console.log("Server running on port 3000");
