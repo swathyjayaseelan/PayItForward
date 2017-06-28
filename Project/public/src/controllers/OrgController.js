@@ -1,8 +1,8 @@
 //
 //angular.module('PayItForward',[])
 var PayItForward = angular.module('PayItForward');
-PayItForward.controller('OrgController',['$scope','$http','$location','$rootScope', 'NgMap', function($scope,$http,$location,$rootScope,NgMap){
-   console.log("Hello from Org Controller");
+PayItForward.controller('OrgController',['$scope','$http','$location','$rootScope', 'NgMap','$window', function($scope,$http,$location,$rootScope,NgMap){
+   //console.log("Hello from Org Controller");
 
    var vm = this;
    vm.types = "['establishment']";
@@ -22,16 +22,16 @@ $scope.coordinates = {};
    }
 
 
-  console.log($scope.coordinates);
+  //console.log($scope.coordinates);
    $scope.allskills = ['Verbal/Written Communication','Basic Computer Skills/Administrative Support','Food Delivery/Distribution','Elder Care',
    'Landscaping/gardening','Fitness Instruction','Tutoring','Animal care','Book keeping'];
    $scope.skills =[];
 //Function to post event
    $scope.postEvent = function(event){
    $scope.event.expskills = $scope.skills;
-   console.log($rootScope.currentUser);
+   //console.log($rootScope.currentUser);
    $scope.event.loc = $scope.coordinates;
-   console.log($scope.event.loc);
+   //console.log($scope.event.loc);
      $http.post('/postEvents',event).then(successCallback,errorCallback);
      function successCallback(response){
        $rootScope.currentEvent = event;
@@ -41,5 +41,37 @@ $scope.coordinates = {};
      }
    }
 
+   $scope.load = function(){
+    // console.log("Ready");
+     $http.get('/vollist').then(successCallback,errorCallback);
 
+     function successCallback(response){
+       console.log(response.data);
+       $rootScope.reqvolarray = response.data.filter(function(dat){
+         if(dat.hasOwnProperty('reqvollist')){
+           return dat;
+         }
+
+       });
+
+   }
+     function errorCallback(response){
+       console.log(error);
+     }
+   }
+
+$scope.accept =function(y,x){
+console.log(x);
+console.log(y);
+y.eventID = x._id;
+console.log(y);
+$http.post('/addaccvol',y).then(successCallback1,errorCallback1);
+$window.location.reload();
+function successCallback1(response){
+
+}
+function errorCallback1(response){
+  console.log("error");
+}
+}
 }]);

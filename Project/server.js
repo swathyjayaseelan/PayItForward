@@ -143,8 +143,42 @@ app.post('/updateUser',function(req, res, next){
 app.post('/matchEvents',function(req,res,next){
   //console.log(req.body);
   db.runCommand( { geoNear: "events", near: req.body, spherical: true, distanceMultiplier: 6371,  includeLocs: true , distanceField:"dist.calculated"}, function(err,docs){
+    docs.resultsnew = [];
+    var count = 0;
+  //  console.log(docs.results);
+    console.log(currentUser.skills);
 
-    res.json(docs.results);
+      docs.resultsnew = docs.results.filter(function(result){
+        count =0;
+        console.log(result.obj.expskills);
+
+        var temp = result.obj.expskills.filter(function(x){
+         for(var i=0; i<currentUser.skills.length;i++){
+           console.log(currentUser.skills[i]);
+           console.log(x);
+           if(currentUser.skills[i] === x){
+             count =  count +1;
+           }
+           console.log(count);
+         }
+         if(count>0){
+           console.log(x);
+           return x;
+         }
+
+        });
+        console.log(temp);
+        if(temp.length!==0){
+          console.log(result);
+
+          return result;
+        }
+
+      });
+    //  console.log(docs.results[event].obj.expskills);
+    console.log(docs.resultsnew);
+    docs.results = docs.resultsnew;
+  res.json(docs.results);
   });
 });
 
@@ -213,7 +247,22 @@ app.post('/addreqVol',function(req,res,next){
   );
 });
 
+app.get('/vollist',function(req,res){
+  console.log(currentUser);
+  db.events.find({orgid: ObjectId(currentUser._id)},function(err,docs){
+    res.json(docs);
+  });
+});
 
+app.post('/addaccvol',function(req,res,next){
+
+  console.log(req.body.email);
+  db.events.update(
+    {_id: ObjectId(req.body.eventID)},
+    {$pull: {reqvollist: {email: req.body.email}}},
+    {$addToSet:{acceptedvollist: req.body}}
+  );
+});
 app.get('/hospitallist',function(req, res){
   db.hospital.find(function(err,docs){
     res.json(docs);

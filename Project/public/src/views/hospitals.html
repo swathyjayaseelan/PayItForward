@@ -11,8 +11,14 @@
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Address</label>
+
         <div class="col-sm-4">
-          <input class="form-control" placeholder="Address" ng-required="true" ng-model="hospital.address">
+          <input class="form-control" places-auto-complete size="59"
+            ng-model="hsopital.location"
+            component-restrictions="{country:'us'}"
+            types="{{types}}"
+            on-place-changed="vm.placeChanged()" /> <br/>
+
         </div>
       </div>
       <div class="form-group">
