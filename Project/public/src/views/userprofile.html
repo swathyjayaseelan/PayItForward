@@ -36,13 +36,23 @@
    </div>
 
 <!--Main content-->
-<div class="container">
-    <div class="row">
-               <div class="jumbotron text-center col-md-7 ">
-                    <h1 class="">Hello {{currentUser.data.name}}!</h>
-               </div>
+<div class="jumbotron text-center  ">
+     <h1 class="">Hello {{currentUser.data.name}}!</h>
+</div>
 
-               <div  class="col-md-5">
+<div class="container">
+
+    <div class="row">
+      <div class=" col-md-6">
+     <ng-map id="map" center='current-position'
+     geo-fallback-center="[40.74, -74.18]"
+     geo-callback="vm.callbackFunc('you')">
+     <marker animation="DROP" position="current-location">
+     </marker>
+     </ng-map>
+     </div>
+
+               <div  class="col-md-6">
                  <div style="background-color:lightblue;">
                  <h1>Events nearby</h1></div>
 
@@ -61,20 +71,9 @@
                      <hr>
                    </div>
                </div>
-             </div>
 
-
-
-
-               <div class=" col-md-7">
-             <ng-map id="map" center='current-position'
-    geo-fallback-center="[40.74, -74.18]"
-    geo-callback="vm.callbackFunc('you')">
-    <marker animation="DROP" position="current-location">
-    </marker>
-    </ng-map>
-             </div>
       </div>
+    </div>
 
 </div>
 </body>

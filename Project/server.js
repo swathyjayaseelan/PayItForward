@@ -46,11 +46,11 @@ app.post('/userlist',function(req, res, next){
 db.user.findOne({email: {$eq:req.body.email}}, function(err, user){
   if(user){
     res.json(null);
-    console.log("user exists");
+    //console.log("user exists");
     return;
   }
   else{
-    console.log("insert");
+    //console.log("insert");
     db.user.insert(req.body, function(err,doc){
         res.json(doc);
       });
@@ -212,7 +212,7 @@ var transporter = nodemailer.createTransport({
   //Mail options
   mailOpts = {
       from: 'swathyjayaseelan@gmail.com',
-      to: 'reeves.skr@gmail.com',
+      to: 'swathyjayaseelan@gmail.com',
       subject: 'New volunteer request for event: '+req.body.data.eventname,
       text: 'A new volunteer has requested for the below events',
       html: '<b>Event name: </b>'+req.body.data.eventname+'<br>'+'<b>Event location: </b>'+req.body.data.eventloc+'br>'+'<b>Volunteer name: </b>'+req.body.data.name+ '<br>'+'<b>Contact Email: </b>'+req.body.data.email+'<br>'+ '<b>Skills: </b>'+req.body.data.skills
@@ -248,7 +248,7 @@ app.post('/addreqVol',function(req,res,next){
 });
 
 app.get('/vollist',function(req,res){
-  console.log(currentUser);
+  //console.log(currentUser);
   db.events.find({orgid: ObjectId(currentUser._id)},function(err,docs){
     res.json(docs);
   });
@@ -259,17 +259,55 @@ app.post('/addaccvol',function(req,res,next){
   console.log(req.body.email);
   db.events.update(
     {_id: ObjectId(req.body.eventID)},
-    {$pull: {reqvollist: {email: req.body.email}}},
     {$addToSet:{acceptedvollist: req.body}}
+
   );
+  db.events.update(
+    {_id: ObjectId(req.body.eventID)},
+    {$pull: {reqvollist: {email: req.body.email}}}
+  )
+  //res.json(docs);
 });
 
+app.post('/removevol',function(req,res,next){
+console.log(req.body);
+  db.events.update(
+    {_id: ObjectId(req.body.eventID)},
+    {$pull:{reqvollist: {email: req.body.email}}}
+  );
+
+
+});
+
+app.get('/toratevol',function(req,res,next){
+  console.log(currentUser);
+  db.events.find({orgid: ObjectId(currentUser._id)}, function(err,docs){
+    res.json(docs);
+  });
+});
+
+app.post('/ratevol',function(req,res,next){
+  db.user.update(
+    {email: req.body.email},
+    {$set: {rating: req.body.rating}}
+  );
+  db.events.update(
+    {_id: ObjectId(req.body.eventID)},
+    {$addToSet: {ratedvollist: req.body}}
+  );
+  db.events.update(
+    {_id: ObjectId(req.body.eventID)},
+    {$pull: {acceptedvollist: {email: req.body.email}}}
+  );
+
+
+});
 app.post('/hospitallist',function(req, res, next){
-  console.log(req.body);
+  //console.log(req.body);
   var search = [];
   search.push(req.body.locationcoord.lng);
   search.push(req.body.locationcoord.lat);
-  console.log(search);
+  //console.log(search);
 db.hospital.insert(req.body, function(err,doc){
   db.runCommand( { geoNear: "user", near: search, spherical: true, distanceMultiplier: 3963.2, maxDistance: (10/3963.2), includeLocs: true , distanceField:"distance", query: {blood: req.body.blood}}, function(err,docs){
   //console.log(docs.results);
@@ -284,7 +322,7 @@ var transporter = nodemailer.createTransport({
 });
 
   for(var donor in docs.results){
-    console.log(docs.results[donor]);
+    //console.log(docs.results[donor]);
     mailOpts = {
         from: 'swathyjayaseelan@gmail.com',
         to: docs.results[donor].obj.email,

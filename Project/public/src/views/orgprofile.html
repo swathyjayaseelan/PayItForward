@@ -11,21 +11,13 @@
                        </a>
 
                </li>
-               <li class=""> <a href="#!/editorgprofile" data-target="#editorgprofile" data-scroll="" class="">
-                           <span class="fa fa-anchor solo">Edit Profile</span>
-                       </a>
 
-               </li>
                <li class=""> <a href="#!/addvolreview" data-target="#addvolreview" data-scroll="" class="">
                            <span class="fa fa-anchor solo">Add review</span>
                        </a>
 
                </li>
-               <li class=""> <a href="#anch3" data-scroll="" class="">
-                           <span class="fa fa-anchor solo">Inbox</span>
-                       </a>
 
-               </li>
                <li class=""> <a href="#!" data-target="#" data-scroll="" class="">
                            <span class="fa fa-anchor solo" ng-click="logout()">Logout</span>
                        </a>
@@ -45,14 +37,17 @@
 
                </div>
            </div>
+           <div class="newrequest">
            <div class="row"  ng-init="load()">
                <div class="col-md-12 well">
                    <h1 id="anch1" class="">New Volunteer Requests:</h1><br>
-
+                  <div id="hidethis">
+                    <p>None</p>
+                  </div>
                   <div id="details" ng-repeat="x in reqvolarray">
                     <h1>Event name: {{x.name}} </h1>
                     <div ng-repeat="y in x.reqvollist" >
-                      <button class="btn btn-danger" style="float:right; margin-left:3px;">Not now</button><button ng-click="accept(y,x)" class="btn btn-success" style="float:right;">Accept</button></p>
+                      <button class="btn btn-danger" ng-click="reject(y,x)" style="float:right; margin-left:3px;">Not now</button><button ng-click="accept(y,x)" class="btn btn-success" style="float:right;">Accept</button></p>
                     <p><b>Volunteer name: </b>{{y.name}}</p>
                     <p><b>Location: </b></p>
                     <p><b>Contact Email: </b>{{y.email}}</p>
@@ -70,5 +65,5 @@
                </div>
 
            </div>
-
+</div>
 </div>
