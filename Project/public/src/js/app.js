@@ -59,6 +59,10 @@ controller: "MainController"
   templateUrl: 'src/views/viewevent.html',
   controller: "MainController"
 })
+.when('/history',{
+  templateUrl: 'src/views/history.html',
+  controller: "MainController"
+})
 .otherwise({
   redirectTo: '/home',
   controller: "MainController"

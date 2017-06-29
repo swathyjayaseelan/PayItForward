@@ -101,6 +101,7 @@ $scope.login = function(user){
   function successCallback2(response)
   {
     $rootScope.currentUser = response;
+    localStorage.setItem('presentUser',JSON.stringify($rootScope.currentUser));
     var x= $rootScope.currentUser.data.website;
     //console.log(x);
     if($rootScope.currentUser.data.website){
@@ -170,4 +171,24 @@ $scope.requestevent = function(){
     console.log("error");
   }
 }
+
+$scope.getevents = function(){
+  console.log("here");
+
+  //$rootScope.currentUser = JSON.parse(localStorage.getItem('presentUser'));
+  //console.log($rootScope.currentUser);
+  $http.get('/getevent').then(successCallback,errorCallback);
+  function successCallback(response){
+    console.log(response);
+    console.log(response.data.eventsparticipated);
+    $rootScope.userevents = response.data.eventsparticipated;
+  }
+  function errorCallback(response){
+    console.log(response);
+  }
+}
+
+
+
+
 }]);

@@ -1,6 +1,12 @@
-<div ng-controller="MainController">
+<div ng-controller="MainController" ng-init="getevents()" align="center">
+  <h1>Events participated so far</h1>
+  <div class="display">
 
-
-
-
+<div ng-repeat = "x in userevents">
+  <p><b>Event name: </b> {{x.eventname}}</p>
+  <p><b>Event location: </b>{{x.eventlocation}}</p>
+  <p><b>Rating obtained: </b>{{x.eventrating}}</p>
+  <hr>
+</div>
+</div>
 </div>

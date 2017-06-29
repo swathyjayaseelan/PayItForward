@@ -4,6 +4,13 @@ html{
 body{
   background-color: lightgray;
 }
+.display{
+  margin: 10px;
+  padding-top: 10px;
+  border: 1px solid white;
+  width: 500px;
+  border-bottom: 0px;
+}
 .title{
   background-color: lightblue;
   margin-top: 0;

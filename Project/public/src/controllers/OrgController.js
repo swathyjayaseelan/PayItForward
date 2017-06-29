@@ -117,8 +117,13 @@ function errorCallback(response){
 }
 }
 
-$scope.rate = function(y){
+$scope.rate = function(y,x){
   console.log(y);
+  console.log(x);
+
+  y.eventname = x.name;
+  y.eventlocation = x.location;
+  y.eventrating = y.rating;
   $http.post('/ratevol',y).then(successCallback,errorCallback);
   $window.location.reload();
   function successCallback(response){

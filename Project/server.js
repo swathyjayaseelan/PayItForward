@@ -98,8 +98,8 @@ app.post('/logout', function(req, res){
 
 //Post events
 app.post('/postEvents',function(req,res){
- console.log(req.body);
- console.log(currentUser);
+ //onsole.log(req.body);
+ //console.log(currentUser);
 /* db.user.update(
    {_id: currentUser._id },
    {
@@ -146,37 +146,37 @@ app.post('/matchEvents',function(req,res,next){
     docs.resultsnew = [];
     var count = 0;
   //  console.log(docs.results);
-    console.log(currentUser.skills);
+    //sconsole.log(currentUser.skills);
 
       docs.resultsnew = docs.results.filter(function(result){
         count =0;
-        console.log(result.obj.expskills);
+        //console.log(result.obj.expskills);
 
         var temp = result.obj.expskills.filter(function(x){
          for(var i=0; i<currentUser.skills.length;i++){
-           console.log(currentUser.skills[i]);
-           console.log(x);
+           //console.log(currentUser.skills[i]);
+           //console.log(x);
            if(currentUser.skills[i] === x){
              count =  count +1;
            }
-           console.log(count);
+           //console.log(count);
          }
          if(count>0){
-           console.log(x);
+           //console.log(x);
            return x;
          }
 
         });
-        console.log(temp);
+        //console.log(temp);
         if(temp.length!==0){
-          console.log(result);
+          //console.log(result);
 
           return result;
         }
 
       });
     //  console.log(docs.results[event].obj.expskills);
-    console.log(docs.resultsnew);
+    //console.log(docs.resultsnew);
     docs.results = docs.resultsnew;
   res.json(docs.results);
   });
@@ -186,7 +186,7 @@ app.post('/matchEvents',function(req,res,next){
 
 app.post('/postEmail',function(req,res,next){
   //console.log("reched here");
-  console.log(req.body);
+  //console.log(req.body);
   var mailOpts, smtpTrans;
   //Setup Nodemailer transport, I chose gmail. Create an application-specific password to avoid problems.
 
@@ -234,13 +234,13 @@ var transporter = nodemailer.createTransport({
 
 //adding volunteer to the requested event
 app.post('/addreqVol',function(req,res,next){
-  console.log(req.body);
+  //console.log(req.body);
   voldetails = {};
   voldetails.name = req.body.data.name;
   voldetails.email = req.body.data.email;
   voldetails.skills = req.body.data.skills;
   //console.log(req.body.data.eventid);
-  console.log(voldetails);
+  //console.log(voldetails);
   db.events.update(
     {_id: ObjectId(req.body.data.eventid)},
     {$addToSet:{reqvollist: voldetails}}
@@ -256,7 +256,7 @@ app.get('/vollist',function(req,res){
 
 app.post('/addaccvol',function(req,res,next){
 
-  console.log(req.body.email);
+  //console.log(req.body.email);
   db.events.update(
     {_id: ObjectId(req.body.eventID)},
     {$addToSet:{acceptedvollist: req.body}}
@@ -270,7 +270,7 @@ app.post('/addaccvol',function(req,res,next){
 });
 
 app.post('/removevol',function(req,res,next){
-console.log(req.body);
+//console.log(req.body);
   db.events.update(
     {_id: ObjectId(req.body.eventID)},
     {$pull:{reqvollist: {email: req.body.email}}}
@@ -280,16 +280,26 @@ console.log(req.body);
 });
 
 app.get('/toratevol',function(req,res,next){
-  console.log(currentUser);
+  //console.log(currentUser);
   db.events.find({orgid: ObjectId(currentUser._id)}, function(err,docs){
     res.json(docs);
   });
 });
 
 app.post('/ratevol',function(req,res,next){
+  console.log(req.body);
+  var events = {};
+  events.eventname = req.body.eventname;
+    events.eventlocation = req.body.eventlocation;
+      events.eventrating = req.body.eventrating;
   db.user.update(
     {email: req.body.email},
     {$set: {rating: req.body.rating}}
+
+  );
+  db.user.update(
+    {email: req.body.email},
+    {$addToSet: {eventsparticipated: events}}
   );
   db.events.update(
     {_id: ObjectId(req.body.eventID)},
@@ -302,6 +312,20 @@ app.post('/ratevol',function(req,res,next){
 
 
 });
+
+app.get('/getevent',function(req,res,next){
+  console.log(currentUser._id);
+db.user.findOne({_id: ObjectId(currentUser._id)},function(err,docs){
+  console.log(docs);
+  res.json(docs);
+});
+
+});
+
+
+
+
+
 app.post('/hospitallist',function(req, res, next){
   //console.log(req.body);
   var search = [];
@@ -386,6 +410,7 @@ var transporter = nodemailer.createTransport({
 
 */
 });
+
 
 
 

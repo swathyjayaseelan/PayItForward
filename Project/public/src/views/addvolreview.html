@@ -8,7 +8,7 @@
 
 <div ng-repeat="x in volratingarray">
   <h1>Event name: {{x.name}}</h1>
-
+  <h1>Location: {{x.location}}</h1>
   <div ng-repeat="y in x.acceptedvollist">
   <p><b>Volunteer name: </b>{{y.name}}</p>
   <p><b>Email: </b>{{y.email}}</p>
@@ -22,7 +22,7 @@
         <label><input type="radio" ng-model="y.rating" name="optradio" value="5">5</label>
       </div>
     </form>
-  </p><button ng-click="rate(y)" class="btn btn-success" align="center">Submit</button></p><br>
+  </p><button ng-click="rate(y,x)" class="btn btn-success" align="center">Submit</button></p><br>
 </div>
 
 <hr>
