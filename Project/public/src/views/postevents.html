@@ -1,4 +1,7 @@
+<body align="center">
+<div style="margin: 3px;">
 <h1>Post events here</h1>
+</div>
 <form class="form-horizontal" ng-controller="OrgController as vm">
       <div class="form-group">
         <label class="col-sm-2 control-label">Name of Event</label>
@@ -6,7 +9,6 @@
           <input type="text" class="form-control" placeholder="Name" ng-required="true" ng-model="event.name">
         </div>
       </div>
-      <!--
       <div class="form-group">
         <label class="col-sm-2 control-label">Date</label>
         <div class="col-sm-4">
@@ -20,12 +22,11 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label">Estimated time commitment</label>
+        <label class="col-sm-2 control-label">Estimated time commitment (hrs)</label>
         <div class="col-sm-4">
           <input type="number" class="form-control" placeholder="Hours" ng-required="true" ng-model="event.estimate">
         </div>
       </div>
-    -->
       <div class="form-group">
         <label class="col-sm-2 control-label">Location</label>
 
@@ -38,8 +39,6 @@
 
         </div>
       </div>
-
-      <!--
       <div class="form-group">
         <label class="col-sm-2 control-label">Sponsoring Organization/Person</label>
         <div class="col-sm-4">
@@ -58,7 +57,7 @@
           <input type="email" class="form-control" placeholder="xxx@email.com" ng-required="true" ng-model="event.email">
         </div>
       </div>
-    -->
+
 
       <div class="form-group">
         <label class="col-sm-2 control-label">Skills</label>
@@ -76,3 +75,4 @@
       </div>
 
     </form>
+</body>

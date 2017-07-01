@@ -35,6 +35,8 @@ $scope.coordinates = {};
      $http.post('/postEvents',event).then(successCallback,errorCallback);
      function successCallback(response){
        $rootScope.currentEvent = event;
+       alert("Event has been added to the database");
+       $location.url('/orgprofile');
      }
      function errorCallback(response){
        console.log("error");
