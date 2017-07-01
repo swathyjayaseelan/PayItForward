@@ -1,3 +1,6 @@
+
+
+
 var PayItForward = angular.module('PayItForward', ['ngRoute','checklist-model','ngMap','720kb.socialshare'])
 
 .config(['$routeProvider','$locationProvider', function($routeProvider,$locationProvider){
@@ -63,10 +66,16 @@ controller: "MainController"
   templateUrl: 'src/views/history.html',
   controller: "MainController"
 })
+.when('/chat',{
+  templateUrl: 'src/views/chatpage.html',
+  controller: "MainController"
+})
 .otherwise({
   redirectTo: '/home',
   controller: "MainController"
 });
+
+
 }]);
 
 var checkLoggedin = function($q, $timeout, $http, $location, $rootScope)

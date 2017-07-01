@@ -10,23 +10,20 @@
                <li class="sidebar-brand active"> <a href="#home" class=""><span class="fa fa-home solo">Home</span></a>
 
                </li>
-               <li class=""> <a href="#anch1" data-scroll="" class="">
-                           <span class="fa fa-anchor solo">Edit Profile</span>
-                       </a>
 
-               </li>
                <li class=""> <a href="#!/history" data-scroll="" class="">
                            <span class="fa fa-anchor solo">History</span>
                        </a>
 
                </li>
-               <li class=""> <a href="#anch3" data-scroll="" class="">
-                           <span class="fa fa-anchor solo">Chat!</span>
+               <li class="">
+                 <a href="#!/chat" data-scroll="" class="">
+                           <span class="fa fa-anchor solo">Ask for help!</span>
                        </a>
 
                </li>
 
-               <li class=""> <a href="#anch4" data-scroll="" class="">
+               <li class=""> <a href="#!/home" data-scroll="" class="">
                            <span class="fa fa-anchor solo">Logout</span>
                        </a>
 
@@ -37,7 +34,8 @@
 
 <!--Main content-->
 <div class="jumbotron text-center  ">
-     <h1 class="">Hello {{currentUser.data.name}}!</h>
+     <h1 class="">Hello {{currentUser.data.name}}!</h1>
+     <h3>Current Rating : {{currentUser.data.rating}}</h3>
 </div>
 
 <div class="container">

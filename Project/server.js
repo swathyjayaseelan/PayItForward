@@ -18,6 +18,14 @@ var session      = require('express-session');
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 
+var twilio = require('twilio');
+var client = twilio('AC61a036842bf8e3261818b79aef7a7cba', '877427d1370d4a027de08a4503dee237');
+
+
+
+
+
+
 app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/public'));
@@ -35,7 +43,35 @@ app.use(multer({dest:__dirname+'public/file/uploads/'}).any());
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.post('/sendcontent',function(req,res,next){
+  console.log(req.body);
+  console.log(currentUser);
+db.runCommand( { geoNear: "user", near: currentUser.currentlocation, spherical: true, distanceMultiplier: 3963.2, maxDistance: (10/3963.2), includeLocs: true , distanceField:"distance"}, function(err,docs){
+  console.log(docs.results);
+  for( var res in docs.results){
+    console.log(docs.results[res].obj.mobile);
+    client.messages.create({
+        to: docs.results[res].obj.mobile,
+        from: "+14845467119",
+        body: "Message Body: Dear "+docs.results[res].obj.name+", " +req.body.content+". I am at "+currentUser.currentlocation+" which is "+docs.results[res].dis+" miles from your home."+" -- "+currentUser.name
+      }, function(err, message) {
+        console.log(message.sid);
+      });
+  }
 
+});
+
+
+ /*client.messages.create({
+    to: "+19493378338",
+    from: "+14845467119",
+    body: "Message Body: "+req.body.content+" I am at "+currentUser.currentlocation+" -- "+currentUser.name
+  }, function(err, message) {
+    console.log(message.sid);
+  });
+*/
+
+});
 //User registration
 app.get('/userlist',function(req,res,next){
   db.user.find(function(err,docs){
@@ -131,10 +167,10 @@ db.user.find({$and: [{role: "volunteer"},{ skills: {$in: check}}]}, function(err
 
 });
 app.post('/updateUser',function(req, res, next){
-  //console.log(req.body.data._id);
+  //console.log(req.body.data.currentlocation);
   db.user.update(
     { name: req.body.data.name},
-    {$unset: {currentlocation: 0 }}
+    {$set: {currentlocation: req.body.data.currentlocation }}
   );
 
 });
@@ -234,11 +270,13 @@ var transporter = nodemailer.createTransport({
 
 //adding volunteer to the requested event
 app.post('/addreqVol',function(req,res,next){
-  //console.log(req.body);
+  console.log(req.body);
   voldetails = {};
   voldetails.name = req.body.data.name;
   voldetails.email = req.body.data.email;
   voldetails.skills = req.body.data.skills;
+  voldetails.rating = req.body.data.rating;
+
   //console.log(req.body.data.eventid);
   //console.log(voldetails);
   db.events.update(

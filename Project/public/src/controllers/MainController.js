@@ -1,5 +1,5 @@
 var PayItForward = angular.module('PayItForward');
-PayItForward.controller('MainController',['$scope','$http','$location','$rootScope','NgMap', function($scope,$http,$location,$rootScope,NgMap){
+PayItForward.controller('MainController',['$http','$location','$rootScope','NgMap','$scope', function($http,$location,$rootScope,NgMap,$scope){
 
 //To get the current location of user
   var vm = this;
@@ -25,15 +25,18 @@ $scope.addresscoord = {};
         vm.map = map;
       });
       vm.callbackFunc = function(param) {
-        //console.log('I know where '+ param +' are. ' + vm.message);
-        //console.log('You are at' + vm.map.getCenter());
+        console.log('I know where '+ param +' are. ' + vm.message);
+        console.log('You are at' + vm.map.getCenter());
         currentlocation = "" + vm.map.getCenter();
         $scope.updateUser(currentlocation);
         lat = vm.map.getCenter().lat();
         lon = vm.map.getCenter().lng();
+        //console.log(vm.map.getCenter());
         var cor = [];
         cor.push(lon);
         cor.push(lat);
+        console.log(cor);
+        $scope.updateUser(cor);
         $http.post('/matchEvents',cor).then(successCallback,errorCallback);
         function successCallback(response){
           $scope.eventdata = response.data;
@@ -91,7 +94,7 @@ $scope.addUser = function(user){
 $scope.updateUser = function(currentlocation){
   //console.log(currentlocation);
   $rootScope.currentUser.data.currentlocation = currentlocation;
-  //console.log($rootScope.currentUser);
+  console.log($rootScope.currentUser);
   $http.post('/updateUser',$rootScope.currentUser).then(successCallback,errorCallback);
 }
 
@@ -188,7 +191,16 @@ $scope.getevents = function(){
   }
 }
 
-
+$scope.sendMessage = function(message){
+  console.log(message);
+  $http.post('/sendcontent',message).then(successCallback,errorCallback);
+function successCallback(response){
+  console.log(response);
+}
+function errorCallback(response){
+  console.log(response);
+}
+}
 
 
 }]);
