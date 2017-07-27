@@ -13,5 +13,5 @@ It is built in MEAN stack with a user friendly interface
 6. Bootstrap for responsive user interface
 7. ng-map for intergrating map interface and providing directions
 8. angular-socialshare to connect to Facebook to share content
-9. Passport.js for user authentication
+9. Passport for user authentication
 10. Twilio
