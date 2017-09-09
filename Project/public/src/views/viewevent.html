@@ -6,7 +6,10 @@
 <meta property="og:description" content="Eventname" />
 <p><strong>Event name: </strong> {{eventname}}</p>
 <p><strong>Event location: </strong> {{eventloc}}</p>
-<p><strong>Expected skills: </strong></p>
+<p><strong>Expected skills: </strong>
+<ul ng-repeat="y in eventskills">
+  <li>{{y}}</li>
+</ul></p>
 {{finaleventid=eventid;""}}
 </div>
 <div class="row">
@@ -38,8 +41,9 @@ socialshare-text="Hey there"
 socialshare-caption="amavido"
 socialshare-url="http://facebook.com"
 socialshare-redirect-uri="http://localhost:3000/#!/userprofile">
-Share on facebook
-</a></button>
+Share
+</a><i class="fa fa-facebook-official fa-2x" style="color:#3b5998 " aria-hidden="true"></i></button>
+<a href="#!/userprofile"><button class="btn btn-primary" align="center">Home</button></a>
 </div>
 <div class="col-md-4">
 <div id="directions-panel">

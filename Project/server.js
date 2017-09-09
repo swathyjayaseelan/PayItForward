@@ -3,7 +3,7 @@ var app = express();
 
 var mongojs = require('mongojs');
 var ObjectId = require("mongojs").ObjectId;
-var db = mongojs('user', ['user']);
+var db = mongojs('mongodb://swathy:swathy@ds127994.mlab.com:27994/payitforward', ['user']);
 
 var bodyParser = require('body-parser');
 var multer = require ('multer');
@@ -20,11 +20,6 @@ var smtpTransport = require('nodemailer-smtp-transport');
 
 var twilio = require('twilio');
 var client = twilio('AC61a036842bf8e3261818b79aef7a7cba', '877427d1370d4a027de08a4503dee237');
-
-
-
-
-
 
 app.use(bodyParser.json());
 
@@ -55,7 +50,7 @@ db.runCommand( { geoNear: "user", near: currentUser.currentlocation, spherical: 
         from: "+14845467119",
         body: "Message Body: Dear "+docs.results[res].obj.name+", " +req.body.content+". I am at "+currentUser.currentlocation+" which is "+docs.results[res].dis+" miles from your home."+" -- "+currentUser.name
       }, function(err, message) {
-        console.log(message.sid);
+      //  console.log(message.sid);
       });
   }
 
@@ -178,6 +173,7 @@ app.post('/updateUser',function(req, res, next){
 //matching events with volunteers
 app.post('/matchEvents',function(req,res,next){
   //console.log(req.body);
+  db.events.createIndex( { loc : "2d" } );
   db.runCommand( { geoNear: "events", near: req.body, spherical: true, distanceMultiplier: 3963.2,  includeLocs: true , distanceField:"dist.calculated"}, function(err,docs){
     docs.resultsnew = [];
     var count = 0;
@@ -304,7 +300,7 @@ app.post('/addaccvol',function(req,res,next){
     {_id: ObjectId(req.body.eventID)},
     {$pull: {reqvollist: {email: req.body.email}}}
   )
-  //res.json(docs);
+  res.json('success');
 });
 
 app.post('/removevol',function(req,res,next){
@@ -360,10 +356,6 @@ db.user.findOne({_id: ObjectId(currentUser._id)},function(err,docs){
 
 });
 
-
-
-
-
 app.post('/hospitallist',function(req, res, next){
   //console.log(req.body);
   var search = [];
@@ -371,6 +363,7 @@ app.post('/hospitallist',function(req, res, next){
   search.push(req.body.locationcoord.lat);
   //console.log(search);
 db.hospital.insert(req.body, function(err,doc){
+  db.user.createIndex( { addresscoordinates : "2d" } );
   db.runCommand( { geoNear: "user", near: search, spherical: true, distanceMultiplier: 3963.2, maxDistance: (10/3963.2), includeLocs: true , distanceField:"distance", query: {blood: req.body.blood}}, function(err,docs){
   //console.log(docs.results);
 var mailOpts, smtpTrans;
@@ -390,7 +383,7 @@ var transporter = nodemailer.createTransport({
         to: docs.results[donor].obj.email,
         subject: 'Blood needed urgently!!',
         text: 'A new volunteer has requested for the below events',
-        html: '<b>Hospital name: </b>'+req.body.name+'<br>'+'<b> Location: </b>'+req.body.location+'<br>'+'<b>Contact number: </b>'+req.body.number+ '<br>'+'<b>Distance from home: </b>'+docs.results[donor].dis+'miles'+'<br>'
+        html: '<b>Hospital name: </b>'+req.body.name+'<br>'+'<b> Location: </b>'+req.body.location+'<br>'+'<b>Contact number: </b>'+req.body.number+ '<br>'+'<b>Distance from home: </b>'+docs.results[donor].dis.toFixed(2)+'miles'+'<br>'
     };
     transporter.sendMail(mailOpts, function (error, response) {
         //Email not sent

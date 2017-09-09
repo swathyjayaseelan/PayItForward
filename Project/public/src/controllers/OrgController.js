@@ -26,6 +26,7 @@ $scope.coordinates = {};
    $scope.allskills = ['Verbal/Written Communication','Basic Computer Skills/Administrative Support','Food Delivery/Distribution','Elder Care',
    'Landscaping/gardening','Fitness Instruction','Tutoring','Animal care','Book keeping'];
    $scope.skills =[];
+
 //Function to post event
    $scope.postEvent = function(event){
    $scope.event.expskills = $scope.skills;

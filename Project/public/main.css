@@ -4,6 +4,14 @@ html{
 body{
   background-color: lightgray;
 }
+#eventlist {
+ overflow: auto;
+    overflow-y: scroll;
+    height: 400px;
+}
+.eventtitle {
+  color: #3b5998;
+}
 .display{
   margin: 10px;
   padding-top: 10px;

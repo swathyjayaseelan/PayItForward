@@ -84,6 +84,7 @@ $scope.addUser = function(user){
    function successCallback1(user){
      $rootScope.currentUser = user;
      //console.log($rootScope.currentUser);
+
   }
   function errorCallback1(response){
     console.log("error");
@@ -136,8 +137,10 @@ console.log($scope.eventdata);
 
 for(var event in $scope.eventdata){
   if($scope.eventdata[event].obj._id === x.obj._id){
+    console.log($scope.eventdata[event]);
     $rootScope.eventname = $scope.eventdata[event].obj.name;
     $rootScope.eventloc  = $scope.eventdata[event].obj.location;
+    $rootScope.eventskills = $scope.eventdata[event].obj.expskills;
     $rootScope.eventcoord = [];
     $rootScope.eventcoord.push($scope.eventdata[event].loc.lat);
     $rootScope.eventcoord.push($scope.eventdata[event].loc.lng);
@@ -160,15 +163,17 @@ $scope.requestevent = function(){
   emailbody.data.eventloc = $rootScope.eventloc;
   $http.post('/addreqVol',eventvol).then(successCallback,errorCallback);
   function successCallback(response){
-
+    console.log('hello');
   }
   function errorCallback(response){
     console.log("error");
   }
   $http.post('/postEmail',emailbody).then(successCallback2,errorCallback2);
+  alert('Request has been sent to the volunteer organiser. You will receive a response shortly.');
+
   function successCallback2(response){
-    alert("Request has been submitted to the  organiser. You will receive an email shortly!");
-    $location.url('/userprofile');
+    console.log('request');
+
   }
   function errorCallback2(response){
     console.log("error");
@@ -194,7 +199,10 @@ $scope.getevents = function(){
 $scope.sendMessage = function(message){
   console.log(message);
   $http.post('/sendcontent',message).then(successCallback,errorCallback);
+  alert('Message sent to the nearby volunteers. You will be contacted shortly!');
+  $location.url('/userprofile');
 function successCallback(response){
+
   console.log(response);
 }
 function errorCallback(response){

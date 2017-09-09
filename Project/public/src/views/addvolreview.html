@@ -7,8 +7,8 @@
 </div>
 
 <div ng-repeat="x in volratingarray">
-  <h1>Event name: {{x.name}}</h1>
-  <h1>Location: {{x.location}}</h1>
+  <h4 class="eventtitle">Event name: {{x.name}}</h4>
+  <h4 class="eventtitle">Location: {{x.location}}</h4>
   <div ng-repeat="y in x.acceptedvollist">
   <p><b>Volunteer name: </b>{{y.name}}</p>
   <p><b>Email: </b>{{y.email}}</p>
@@ -28,6 +28,6 @@
 <hr>
 
 </div>
-
+<a href="#!/orgprofile"><button class="btn btn-primary" align="center">Home</button></a>
 </div>
 </body>
