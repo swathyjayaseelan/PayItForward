@@ -1,4 +1,4 @@
-## PayItForward (In-Progress)
+## PayItForward 
 
 ## About
 It is a web app that connects volunteers with opportunities. Through the app the organizations can post their needs and the volunteers can register and plan their activities. A recommendation system will suggest events to volunteers based on various factors like their skills and location. There is a facility for hospitals to post their blood needs and the system will automatically send emails to volunteers with matching blood groups living in the vicinity.
