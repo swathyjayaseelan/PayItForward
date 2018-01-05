@@ -226,8 +226,8 @@ app.post('/postEmail',function(req,res,next){
   service: 'Gmail',
   auth: {
     xoauth2: xoauth2.createXOAuth2Generator({
-    user: 'swathyjayaseelan@gmail.com',
-    pass: 'payitforward'
+    user: '',
+    pass: ''
   }
 )
 });
@@ -237,14 +237,14 @@ var transporter = nodemailer.createTransport({
     //secure: true, // secure:true for port 465, secure:false for port 587
     auth: {
         user: 'payitforwardtestapp@gmail.com',
-        pass: 'swathyravi'
+        pass: ''
     }
 });
 
   //Mail options
   mailOpts = {
-      from: 'swathyjayaseelan@gmail.com',
-      to: 'swathyjayaseelan@gmail.com',
+      from:'',
+      to: '',
       subject: 'New volunteer request for event: '+req.body.data.eventname,
       text: 'A new volunteer has requested for the below events',
       html: '<b>Event name: </b>'+req.body.data.eventname+'<br>'+'<b>Event location: </b>'+req.body.data.eventloc+'br>'+'<b>Volunteer name: </b>'+req.body.data.name+ '<br>'+'<b>Contact Email: </b>'+req.body.data.email+'<br>'+ '<b>Skills: </b>'+req.body.data.skills
@@ -371,8 +371,8 @@ var transporter = nodemailer.createTransport({
     service: 'Gmail',
     //secure: true, // secure:true for port 465, secure:false for port 587
     auth: {
-        user: 'swathyjayaseelan@gmail.com',
-        pass: 'Jayaseelan3773'
+        user: '',
+        pass: ''
     }
 });
 
@@ -414,14 +414,12 @@ var transporter = nodemailer.createTransport({
     //secure: true, // secure:true for port 465, secure:false for port 587
     auth: {
         user: 'payitforwardtestapp@gmail.com',
-        pass: 'swathyravi'
+        pass: ''
     }
 });
 
   //Mail options
-  mailOpts = {
-      from: 'swathyjayaseelan@gmail.com',
-      to: 'swathyjayaseelan@gmail.com',
+  mailOpts 
       subject: 'Blood needed urgently!!',
       text: 'A new volunteer has requested for the below events',
       html: '<b>Hospital name: </b>'+req.body.name+'<br>'+'<b> Location: </b>'+req.body.location+'br>'+'<b>Contact number: </b>'+req.body.number+ '<br>'+'<b>Distance from home: </b>'+req.body.data.email+'<br>'
