@@ -320,6 +320,7 @@ app.get('/toratevol',function(req,res,next){
   });
 });
 
+//Rating volunteer
 app.post('/ratevol',function(req,res,next){
   console.log(req.body);
   var events = {};
@@ -356,6 +357,7 @@ db.user.findOne({_id: ObjectId(currentUser._id)},function(err,docs){
 
 });
 
+// Adding donor request
 app.post('/hospitallist',function(req, res, next){
   //console.log(req.body);
   var search = [];
@@ -376,6 +378,7 @@ var transporter = nodemailer.createTransport({
     }
 });
 
+ //Email donor
   for(var donor in docs.results){
     //console.log(docs.results[donor]);
     mailOpts = {
@@ -407,8 +410,6 @@ res.json(doc);
 
   /*var mailOpts, smtpTrans;
   //Setup Nodemailer transport, I chose gmail. Create an application-specific password to avoid problems.
-
-
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
     //secure: true, // secure:true for port 465, secure:false for port 587
@@ -417,7 +418,6 @@ var transporter = nodemailer.createTransport({
         pass: ''
     }
 });
-
   //Mail options
   mailOpts 
       subject: 'Blood needed urgently!!',
@@ -429,14 +429,11 @@ var transporter = nodemailer.createTransport({
       if (error) {
         console.log(error);
       }
-
       //Yay!! Email sent
       else {
         console.log("success");
       }
   });
-
-
 */
 });
 
